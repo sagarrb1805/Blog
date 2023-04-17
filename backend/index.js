@@ -18,6 +18,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
 app.use('/api/blogs', require('./routes/blogRoute'))
+app.use('/api/users', require('./routes/userRoute'))
 
 // const blog = new Blog({
 //     title:"Hello World",
