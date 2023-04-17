@@ -1,20 +1,22 @@
 const asyncHandler = require('express-async-handler')
 const Blog = require("../schema/blog")
+const User = require("../schema/user")
 
 const getBlogs = asyncHandler(async (req, res) =>{
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({user: req.user.id})
     // console.log("api called")
     res.status(200).json(blogs)
 })
 
 const createBlog = asyncHandler(async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     if (!req.body.title || !req.body.text) {
       res.status(400)
     //   throw new Error('Please add a text field')
     }
   
     const blog = await Blog.create({
+    user: req.user.id,
       title: req.body.title,
       text: req.body.text
     })
@@ -31,17 +33,17 @@ const createBlog = asyncHandler(async (req, res) => {
       throw new Error('blog not found')
     }
   
-    // Check for user
-    // if (!req.user) {
-    //   res.status(401)
-    //   throw new Error('User not found')
-    // }
+
+    if (!req.user) {
+      res.status(401)
+      throw new Error('User not found')
+    }
   
-    // Make sure the logged in user matches the goal user
-    // if (blog.user.toString() !== req.user.id) {
-    //   res.status(401)
-    //   throw new Error('User not authorized')
-    // }
+    
+    if (blog.user.toString() !== req.user.id) {
+      res.status(401)
+      throw new Error('User not authorized')
+    }
   
     const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -62,16 +64,16 @@ const createBlog = asyncHandler(async (req, res) => {
     }
   
 
-    // if (!req.user) {
-    //   res.status(401)
-    //   throw new Error('User not found')
-    // }
+    if (!req.user) {
+      res.status(401)
+      throw new Error('User not found')
+    }
   
     
-    // if (blog.user.toString() !== req.user.id) {
-    //   res.status(401)
-    //   throw new Error('User not authorized')
-    // }
+    if (blog.user.toString() !== req.user.id) {
+      res.status(401)
+      throw new Error('User not authorized')
+    }
   
     await Blog.deleteOne(blog)
   
