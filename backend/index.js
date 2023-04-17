@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const express = require("express")
+const { errorHandler } = require("async-handler-express")
 
 require("dotenv").config()
 
@@ -19,6 +20,8 @@ app.use(express.urlencoded({ extended: true}))
 
 app.use('/api/blogs', require('./routes/blogRoute'))
 app.use('/api/users', require('./routes/userRoute'))
+
+app.use(errorHandler)
 
 // const blog = new Blog({
 //     title:"Hello World",
