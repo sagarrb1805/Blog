@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler')
 const Blog = require("../schema/blog")
 const User = require("../schema/user")
 
+
 const getBlogs = asyncHandler(async (req, res) =>{
     const blogs = await Blog.find({user: req.user.id})
     // console.log("api called")
@@ -14,14 +15,23 @@ const createBlog = asyncHandler(async (req, res) => {
       res.status(400)
     //   throw new Error('Please add a text field')
     }
-  
-    const blog = await Blog.create({
-    user: req.user.id,
-      title: req.body.title,
-      text: req.body.text
-    })
-  
-    res.status(200).json(blog)
+
+    const customer = await User.findById(req.user.id)
+    const limit = customer.noOfBlogs;
+    const blogs = await Blog.find({user: req.user.id})
+    const length = blogs.length
+ 
+    if(length <= limit){
+        const blog = await Blog.create({
+            user: req.user.id,
+              title: req.body.title,
+              text: req.body.text
+            })
+          
+            res.status(200).json(blog)
+    }else{
+        res.status(405).json({message: "Limit reached"})
+    }    
   })
 
 

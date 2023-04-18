@@ -15,6 +15,13 @@ const userSchema = mongoose.Schema(
         type: String,
         required: [true, 'Please add a password'],
       },
+      isPrime:{
+        type: Boolean,
+        default: false
+      },
+      noOfBlogs:{
+        type: Number
+      }
     },
     {
       timestamps: true,

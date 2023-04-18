@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true}))
 
 app.use('/api/blogs', require('./routes/blogRoute'))
 app.use('/api/users', require('./routes/userRoute'))
+app.use('/api/comments', require('./routes/commentRoute'))
 
 app.use(errorHandler)
 
