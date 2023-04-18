@@ -1,19 +1,14 @@
 const mongoose = require("mongoose")
 const express = require("express")
 const { errorHandler } = require("async-handler-express")
+const connectDB = require("./config/db")
 
 require("dotenv").config()
 
 
 const app = express()
 
-mongoose.connect(
-    process.env.MONGODB_URI,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }
-)
+connectDB()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
